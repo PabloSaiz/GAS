@@ -15,7 +15,7 @@ function enviarEmail(){
   // Ahora según el idioma seleccionado enviaremos uno u otro correo, primero evaluamos si es Ingles, en caso de serlo prepara el mensaje en Ingles.
   if (idioma=="Ingles"){
     var subject=nombre+" welcome to the course of GAS";
-    var body="<h1>Now these underwritten</h1> and will receive soon tutorials in the language you've selected.\n"+
+    var body="Now these underwritten and will receive soon tutorials in the language you've selected.\n"+
       "The knowledge level indicated on the form has been "+nivel+"\n\n"+
       "Lesson 1\n"+
       "https://www.youtube.com/watch?v=bDqajllxvGQ";
