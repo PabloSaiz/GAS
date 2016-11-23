@@ -1,0 +1,44 @@
+function insertar(){
+  var ss=SpreadsheetApp.openById('1TeIIiLCq5b1fAHZHdVoQcnbZ6hIHRF_Ra-EO-2zUBP8');
+  var sheet=ss.getSheetByName('Respuestas de formulario 7');
+  var row=sheet.getLastRow();
+  var nombre=sheet.getRange("C"+row).getValue();
+  var doc2 = DocumentApp.openById('1oizLQdtkeEyukNDs7v5p5eKsW2ltTdcCrnTPGvYHw24').getBody();
+  //Insertamos el mensaje que ira adjunto al certificado con el nombre completo del alumno en cuestion
+  doc2.insertParagraph(6, nombre+" ha completado con éxito el curso de conocimientos básicos de GAS");
+}//Fin insertar
+
+function myFunction() {
+  var ss=SpreadsheetApp.openById('1TeIIiLCq5b1fAHZHdVoQcnbZ6hIHRF_Ra-EO-2zUBP8');
+  var sheet=ss.getSheetByName('Respuestas de formulario 7');
+  // Guardamos la ultima fila introducida para poder coger los datos de esta ultima linea
+  var row=sheet.getLastRow();
+  // Cogemos los datos que necesitamos
+  var email=sheet.getRange("D"+row).getValue();
+  if(ss.getSheetByName(email)!=null){
+    var puntuacion=sheet.getRange("B"+row).getValue();
+    var nombre=sheet.getRange("C"+row).getValue();
+    if(puntuacion>=8){//Evaluamos si ha obtenido almenos 8 puntos en el cuestionario
+        var doc = DriveApp.getFileById('1oizLQdtkeEyukNDs7v5p5eKsW2ltTdcCrnTPGvYHw24');
+        var subject = "Enhorabuena "+nombre;
+        var body = "Enhorabuena "+nombre+", has superado el curso de GAS. A continuación te adjuntamos tu certificado";
+        MailApp.sendEmail(email, subject, body,{
+          name: 'Enhorabuena '+nombre,
+          attachments: [doc.getAs(MimeType.PDF)]//Adjuntamos el documento conviertiendolo a PDF
+        });
+    }else{//Si no aprueba le mandamos un mensaje de no superacion con el temario de nuevo
+      var subject = "Sigue esforzandote "+nombre;
+      var doc = DocumentApp.openById('1gEpKmXGj3gT2xE41t9RG4A6DCo3eXADQldkZscm4XTU').getBody();
+      doc.insertParagraph(6, 'https://drive.google.com/open?id=1zg_LR0Tp2JsSbOHYkSkZRqTtwqxuqJGKkQTp_YNHfaM');
+      var body = doc.getText();
+      GmailApp.sendEmail(email, subject, body);
+      doc.removeChild(doc.getChild(6));
+    }//Fin Si
+  }//Fin Si
+}//Fin myFunction
+
+function borrar(){
+  //Borramos el nombre del alumno para reutilizar el documento:
+  var doc2 = DocumentApp.openById('1oizLQdtkeEyukNDs7v5p5eKsW2ltTdcCrnTPGvYHw24').getBody();
+  doc2.removeChild(doc2.getChild(6));
+}//Fin borrar
