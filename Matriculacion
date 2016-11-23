@@ -1,0 +1,40 @@
+// Esta es la función encargada de mandar el correo correspondiente segun el idioma seleccionado
+function enviarEmail(){
+  var ss=SpreadsheetApp.openById('14AKZj8IXxugByLztzbE4TW_xQ2rRXHcTaqYbDSLX6lk');
+  var sheet=ss.getSheetByName('Matriculados');
+  // Guardamos la ultima fila introducida para poder coger los datos de esta ultima linea
+  var row=sheet.getLastRow();
+  // Cogemos los datos que necesitamos
+  var curso=sheet.getRange("D"+row).getValue(); 
+  var nombre=sheet.getRange("B"+row).getValue();
+  var email=sheet.getRange("C"+row).getValue();
+  if(curso=='GAS'){
+    var subject=nombre+" bienvenido al curso GAS 2016-2017";//Cabecera email
+    var doc = DocumentApp.openById('1EJzL4G_97hLskzQtkpog7vHyaUCtyCVnpPFdkLvkDRA').getBody();
+    doc.insertParagraph(6, 'https://drive.google.com/open?id=1zg_LR0Tp2JsSbOHYkSkZRqTtwqxuqJGKkQTp_YNHfaM');
+    var body = doc.getText();
+    // Llamamos a la funcion que mandara el correo dandole el email al que lo tiene que enviar junto con el asunto y el contenido del email:
+    GmailApp.sendEmail(email, subject, body);
+    //nuevoAlumno(email);
+    doc.removeChild(doc.getChild(6));
+    var ss2 = SpreadsheetApp.openById('1TeIIiLCq5b1fAHZHdVoQcnbZ6hIHRF_Ra-EO-2zUBP8');
+    var sheet2=ss2.getSheetByName(email);
+    if(sheet2==null){
+     ss2.insertSheet().setName(email);
+    }//Fin Si
+  }else{
+    var subject=nombre+" bienvenido al curso PHP 2016-2017";//Cabecera email
+    var doc = DocumentApp.openById('1egJvNrV7DQwuikHWQFJUSB_u2MXQnABj7UV43NLbTBA').getBody();
+    doc.insertParagraph(6, 'https://drive.google.com/open?id=1ykQk28bKwVAPEdWBIG8HUDnNaizIPLvYuolpULiy25I');
+    var body = doc.getText();
+    // Llamamos a la funcion que mandara el correo dandole el email al que lo tiene que enviar junto con el asunto y el contenido del email:
+    GmailApp.sendEmail(email, subject, body);
+    //nuevoAlumno(email);
+    doc.removeChild(doc.getChild(6));
+    var ss2 = SpreadsheetApp.openById('12r_nFFi4DJJc1bJOzxwFxpaQgmQECXIwKbuaM5TwaW8');
+    var sheet2=ss2.getSheetByName(email);
+    if(sheet2==null){
+     ss2.insertSheet().setName(email);
+    }//Fin Si
+  }//Fin Si
+}
